@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { EditableCodeBlock } from "@/components/EditableCodeBlock";
-import { Loader2, Award, ExternalLink, Shield, Trophy, Medal, Code, LayoutGrid } from "lucide-react";
+import { Loader2, Award, ExternalLink, Shield, Trophy, Medal, Code } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Achievement } from "@shared/schema";
 
-type ViewMode = "code" | "visual";
+type ViewMode = "visual" | "editor";
 
 const typeIcons: Record<string, typeof Award> = {
   certification: Shield,
@@ -57,38 +57,19 @@ export default function Achievements() {
             Achievements & Certifications
           </h2>
           
-          <div className="flex items-center gap-1 bg-[#21252b] rounded-lg p-1 border border-[#3e4451]">
-            <button
-              onClick={() => setViewMode("code")}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm transition-all ${
-                viewMode === "code" 
-                  ? "bg-[#3e4451] text-[#61afef]" 
-                  : "text-[#abb2bf] hover:text-white"
-              }`}
-              title="Code View"
-            >
-              <Code size={14} />
-              <span className="hidden sm:inline">Code</span>
-            </button>
-            <button
-              onClick={() => setViewMode("visual")}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm transition-all ${
-                viewMode === "visual" 
-                  ? "bg-[#3e4451] text-[#61afef]" 
-                  : "text-[#abb2bf] hover:text-white"
-              }`}
-              title="Visual View"
-            >
-              <LayoutGrid size={14} />
-              <span className="hidden sm:inline">Visual</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setViewMode(viewMode === "visual" ? "editor" : "visual")}
+            className="flex items-center gap-2 text-sm text-[#abb2bf] hover:text-[#61afef] transition-colors"
+          >
+            <Code size={14} />
+            <span>{viewMode === "visual" ? "Open in Editor" : "Close Editor"}</span>
+          </button>
         </div>
 
         <AnimatePresence mode="wait">
-          {viewMode === "code" && (
+          {viewMode === "editor" && (
             <motion.div
-              key="code"
+              key="editor"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
