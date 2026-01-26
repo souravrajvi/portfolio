@@ -62,11 +62,11 @@ export function EditableCodeBlock({ initialCode, language = 'json', onContentCha
     <div className="h-full flex bg-[var(--theme-bg)]">
       <div 
         ref={lineNumbersRef}
-        className="select-none text-right pr-4 pl-4 py-0 text-[var(--theme-text)]/30 leading-[21px] overflow-hidden bg-[var(--theme-sidebar)] border-r border-[var(--theme-border)]"
+        className="select-none text-right pr-4 pl-4 pt-4 text-[var(--theme-text)]/30 leading-[22px] overflow-hidden bg-[var(--theme-sidebar)] border-r border-[var(--theme-border)]"
         style={{ fontFamily: 'Consolas, Monaco, "Courier New", monospace', fontSize: '14px' }}
       >
         {Array.from({ length: lineCount }, (_, i) => (
-          <div key={i + 1} className="h-[21px]">{i + 1}</div>
+          <div key={i + 1} className="h-[22px]">{i + 1}</div>
         ))}
       </div>
       <div className="flex-1 relative">
@@ -79,7 +79,7 @@ export function EditableCodeBlock({ initialCode, language = 'json', onContentCha
           }}
           onKeyDown={handleKeyDown}
           onScroll={handleScroll}
-          className="w-full h-full bg-transparent text-[var(--theme-text)] resize-none outline-none leading-[21px] p-0 pl-4 overflow-auto"
+          className="w-full h-full bg-transparent text-[var(--theme-text)] resize-none outline-none leading-[22px] pt-4 pl-4 pr-4 overflow-auto"
           style={{ 
             fontFamily: 'Consolas, Monaco, "Courier New", monospace',
             fontSize: '14px',
