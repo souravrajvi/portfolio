@@ -42,7 +42,6 @@ const folders = [
   {
     name: "publications",
     files: [
-      { name: "writings.md", path: "/writings", icon: FileText, color: "text-[#519aba]" },
       { name: "blog.md", path: "/blog", icon: FileText, color: "text-[#519aba]" },
     ]
   }

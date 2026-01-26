@@ -1,13 +1,18 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { Loader2, BookOpen, Calendar, Tag, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { EditableCodeBlock } from "@/components/EditableCodeBlock";
+import { Loader2, BookOpen, Calendar, Tag, ArrowRight, Code, LayoutGrid } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { BlogPost } from "@shared/schema";
+
+type ViewMode = "code" | "visual";
 
 export default function Blog() {
   const { data: posts, isLoading } = useQuery<BlogPost[]>({
     queryKey: ["/api/blog"],
   });
+  const [viewMode, setViewMode] = useState<ViewMode>("visual");
 
   if (isLoading) {
     return (
@@ -17,72 +22,139 @@ export default function Blog() {
     );
   }
 
+  const formattedPosts = posts?.map(p => ({
+    title: p.title,
+    slug: p.slug,
+    excerpt: p.excerpt,
+    tags: p.tags,
+    publishedAt: p.publishedAt
+  }));
+
+  const codeString = JSON.stringify(formattedPosts, null, 2);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="max-w-4xl"
-    >
-      <h2 className="text-2xl font-bold text-[#c678dd] mb-8 flex items-center gap-3">
-        <BookOpen className="text-[#c678dd]" />
-        Blog
-      </h2>
-
-      <div className="space-y-6">
-        {posts?.map((post, idx) => (
-          <motion.article
-            key={post.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="bg-[#282c34] rounded-lg p-6 border border-[#3e4451] hover:border-[#c678dd] transition-all group"
-            data-testid={`blog-post-${post.id}`}
-          >
-            <Link href={`/blog/${post.slug}`}>
-              <div className="cursor-pointer">
-                <h3 className="text-xl font-semibold text-[#d4d4d4] group-hover:text-[#c678dd] transition-colors mb-2">
-                  {post.title}
-                </h3>
-                
-                <div className="flex items-center gap-4 text-xs text-[#5c6370] mb-4">
-                  {post.publishedAt && (
-                    <span className="flex items-center gap-1">
-                      <Calendar size={12} />
-                      {post.publishedAt}
-                    </span>
-                  )}
-                  {post.tags && post.tags.length > 0 && (
-                    <span className="flex items-center gap-1">
-                      <Tag size={12} />
-                      {post.tags.slice(0, 3).join(", ")}
-                    </span>
-                  )}
-                </div>
-                
-                {post.excerpt && (
-                  <p className="text-[#abb2bf] text-sm leading-relaxed mb-4">
-                    {post.excerpt}
-                  </p>
-                )}
-                
-                <div className="flex items-center gap-2 text-[#c678dd] text-sm group-hover:gap-3 transition-all">
-                  <span>Read more</span>
-                  <ArrowRight size={14} />
-                </div>
-              </div>
-            </Link>
-          </motion.article>
-        ))}
-      </div>
-
-      {(!posts || posts.length === 0) && (
-        <div className="text-[#5c6370] text-center py-12">
-          <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
-          <p>No blog posts yet</p>
-          <p className="text-xs mt-2">Check back soon for new content!</p>
+    <div className="h-full flex flex-col">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.3 }}
+        className="flex-1 flex flex-col"
+      >
+        <div className="flex items-center justify-between mb-8 px-2">
+          <h2 className="text-2xl font-bold text-[#c678dd] flex items-center gap-3">
+            <BookOpen size={24} />
+            Blog
+          </h2>
+          
+          <div className="flex items-center gap-1 bg-[#21252b] rounded-lg p-1 border border-[#3e4451]">
+            <button
+              onClick={() => setViewMode("code")}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm transition-all ${
+                viewMode === "code" 
+                  ? "bg-[#3e4451] text-[#61afef]" 
+                  : "text-[#abb2bf] hover:text-white"
+              }`}
+              title="Code View"
+            >
+              <Code size={14} />
+              <span className="hidden sm:inline">Code</span>
+            </button>
+            <button
+              onClick={() => setViewMode("visual")}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm transition-all ${
+                viewMode === "visual" 
+                  ? "bg-[#3e4451] text-[#61afef]" 
+                  : "text-[#abb2bf] hover:text-white"
+              }`}
+              title="Visual View"
+            >
+              <LayoutGrid size={14} />
+              <span className="hidden sm:inline">Visual</span>
+            </button>
+          </div>
         </div>
-      )}
-    </motion.div>
+
+        <AnimatePresence mode="wait">
+          {viewMode === "code" && (
+            <motion.div
+              key="code"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.2 }}
+              className="flex-1 font-mono text-sm border border-[#3e4451] rounded-lg overflow-hidden"
+            >
+              <EditableCodeBlock initialCode={codeString || "[]"} language="json" />
+            </motion.div>
+          )}
+
+          {viewMode === "visual" && (
+            <motion.div
+              key="visual"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.2 }}
+              className="flex-1 overflow-auto"
+            >
+              <div className="space-y-6 p-2 max-w-4xl">
+                {posts?.map((post, idx) => (
+                  <motion.article
+                    key={post.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="bg-[#282c34] rounded-xl p-6 border border-[#3e4451] hover:border-[#c678dd] transition-all group"
+                    data-testid={`blog-post-${post.id}`}
+                  >
+                    <Link href={`/blog/${post.slug}`}>
+                      <div className="cursor-pointer">
+                        <h3 className="text-xl font-semibold text-[#d4d4d4] group-hover:text-[#c678dd] transition-colors mb-3">
+                          {post.title}
+                        </h3>
+                        
+                        <div className="flex items-center gap-4 text-xs text-[#5c6370] mb-4">
+                          {post.publishedAt && (
+                            <span className="flex items-center gap-1.5">
+                              <Calendar size={12} />
+                              {post.publishedAt}
+                            </span>
+                          )}
+                          {post.tags && post.tags.length > 0 && (
+                            <span className="flex items-center gap-1.5">
+                              <Tag size={12} />
+                              {post.tags.slice(0, 3).join(", ")}
+                            </span>
+                          )}
+                        </div>
+                        
+                        {post.excerpt && (
+                          <p className="text-[#abb2bf] text-sm leading-relaxed mb-5">
+                            {post.excerpt}
+                          </p>
+                        )}
+                        
+                        <div className="flex items-center gap-2 text-[#c678dd] text-sm group-hover:gap-3 transition-all">
+                          <span>Read more</span>
+                          <ArrowRight size={14} />
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.article>
+                ))}
+
+                {(!posts || posts.length === 0) && (
+                  <div className="text-[#5c6370] text-center py-12">
+                    <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
+                    <p>No blog posts yet</p>
+                    <p className="text-xs mt-2">Check back soon for new content!</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </div>
   );
 }

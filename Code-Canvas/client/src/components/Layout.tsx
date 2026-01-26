@@ -22,7 +22,6 @@ const pathToFile: Record<string, { name: string; folder: string }> = {
   "/education": { name: "education.md", folder: "about" },
   "/music": { name: "music.json", folder: "personal" },
   "/books": { name: "books.json", folder: "personal" },
-  "/writings": { name: "writings.md", folder: "publications" },
   "/achievements": { name: "achievements.json", folder: "career" },
   "/blog": { name: "blog.md", folder: "publications" },
 };
@@ -95,7 +94,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <ThemeSwitcher />
         </div>
 
-        <main className="flex-1 overflow-hidden bg-[var(--theme-bg)]">
+        <main className="flex-1 overflow-auto bg-[var(--theme-bg)] p-6">
           {selectedScratchFile ? <ScratchFileViewer /> : children}
         </main>
         

@@ -14,7 +14,6 @@ import Skills from "@/pages/Skills";
 import Education from "@/pages/Education";
 import Music from "@/pages/Music";
 import Books from "@/pages/Books";
-import Writings from "@/pages/Writings";
 import Achievements from "@/pages/Achievements";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
@@ -31,7 +30,6 @@ function Router() {
         <Route path="/education" component={Education} />
         <Route path="/music" component={Music} />
         <Route path="/books" component={Books} />
-        <Route path="/writings" component={Writings} />
         <Route path="/achievements" component={Achievements} />
         <Route path="/blog" component={Blog} />
         <Route path="/blog/:slug" component={BlogPost} />
