@@ -1,4 +1,5 @@
 import { GitBranch, Check, Bell, AlertCircle, Wifi, Mail } from "lucide-react";
+import { useEditorMode } from "@/context/EditorModeContext";
 
 interface StatusBarProps {
   currentFile?: string;
@@ -6,6 +7,8 @@ interface StatusBarProps {
 }
 
 export function StatusBar({ currentFile = "bio.ts", onOpenContact }: StatusBarProps) {
+  const { isEditorMode } = useEditorMode();
+
   const getFileType = (filename: string) => {
     if (filename.endsWith('.ts') || filename.endsWith('.tsx')) return 'TypeScript React';
     if (filename.endsWith('.json')) return 'JSON';
@@ -42,27 +45,29 @@ export function StatusBar({ currentFile = "bio.ts", onOpenContact }: StatusBarPr
       </div>
       
       <div className="flex items-center space-x-3">
-        <div className="hidden sm:flex items-center space-x-3">
-          <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
-            {getLineInfo(currentFile)}
-          </span>
-          <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
-            Spaces: 2
-          </span>
-          <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
-            UTF-8
-          </span>
-          <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
-            {getFileType(currentFile)}
-          </span>
-        </div>
-        <div 
-          className="flex items-center hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors"
-          title="Prettier"
-        >
-          <Check size={12} className="mr-1" />
-          <span className="hidden sm:inline">Prettier</span>
-        </div>
+        {isEditorMode && (
+          <div className="hidden sm:flex items-center space-x-3">
+            <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
+              {getLineInfo(currentFile)}
+            </span>
+            <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
+              Spaces: 2
+            </span>
+            <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
+              UTF-8
+            </span>
+            <span className="hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors">
+              {getFileType(currentFile)}
+            </span>
+            <div 
+              className="flex items-center hover:bg-white/20 px-2 py-0.5 rounded cursor-pointer transition-colors"
+              title="Prettier"
+            >
+              <Check size={12} className="mr-1" />
+              <span className="hidden sm:inline">Prettier</span>
+            </div>
+          </div>
+        )}
         <div 
           className="hover:bg-white/20 px-1 py-0.5 rounded cursor-pointer transition-colors"
           title="Connected"

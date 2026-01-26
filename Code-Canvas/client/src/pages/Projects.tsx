@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProjects } from "@/hooks/use-portfolio";
 import { EditableCodeBlock } from "@/components/EditableCodeBlock";
 import { Loader2, ExternalLink, Github, Folder, Star, GitBranch, CircleDot, Code } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEditorMode } from "@/context/EditorModeContext";
 
 const statusColors: Record<string, string> = {
   "Active": "text-[#98c379]",
@@ -15,6 +16,12 @@ type ViewMode = "visual" | "editor";
 export default function Projects() {
   const { data: projects, isLoading } = useProjects();
   const [viewMode, setViewMode] = useState<ViewMode>("visual");
+  const { setEditorMode } = useEditorMode();
+
+  useEffect(() => {
+    setEditorMode(viewMode === "editor");
+    return () => setEditorMode(false);
+  }, [viewMode, setEditorMode]);
 
   if (isLoading) {
     return (

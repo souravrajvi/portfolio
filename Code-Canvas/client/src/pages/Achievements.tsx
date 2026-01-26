@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { EditableCodeBlock } from "@/components/EditableCodeBlock";
 import { Loader2, Award, ExternalLink, Shield, Trophy, Medal, Code } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEditorMode } from "@/context/EditorModeContext";
 import type { Achievement } from "@shared/schema";
 
 type ViewMode = "visual" | "editor";
@@ -24,6 +25,12 @@ export default function Achievements() {
     queryKey: ["/api/achievements"],
   });
   const [viewMode, setViewMode] = useState<ViewMode>("visual");
+  const { setEditorMode } = useEditorMode();
+
+  useEffect(() => {
+    setEditorMode(viewMode === "editor");
+    return () => setEditorMode(false);
+  }, [viewMode, setEditorMode]);
 
   if (isLoading) {
     return (

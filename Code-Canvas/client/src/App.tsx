@@ -7,6 +7,7 @@ import { Layout } from "@/components/Layout";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SplashScreen } from "@/components/SplashScreen";
 import { ScratchFilesProvider } from "@/context/ScratchFilesContext";
+import { EditorModeProvider } from "@/context/EditorModeContext";
 import Home from "@/pages/Home";
 import Experiences from "@/pages/Experiences";
 import Projects from "@/pages/Projects";
@@ -58,14 +59,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <ScratchFilesProvider>
-          {showSplash ? (
-            <SplashScreen onComplete={handleSplashComplete} />
-          ) : (
-            <>
-              <Toaster />
-              <Router />
-            </>
-          )}
+          <EditorModeProvider>
+            {showSplash ? (
+              <SplashScreen onComplete={handleSplashComplete} />
+            ) : (
+              <>
+                <Toaster />
+                <Router />
+              </>
+            )}
+          </EditorModeProvider>
         </ScratchFilesProvider>
       </ThemeProvider>
     </QueryClientProvider>

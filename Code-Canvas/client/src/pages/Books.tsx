@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBookRecs } from "@/hooks/use-portfolio";
 import { EditableCodeBlock } from "@/components/EditableCodeBlock";
 import { Loader2, Code, BookOpen, Book } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEditorMode } from "@/context/EditorModeContext";
 
 type ViewMode = "visual" | "editor";
 
 export default function Books() {
   const { data: books, isLoading } = useBookRecs();
   const [viewMode, setViewMode] = useState<ViewMode>("visual");
+  const { setEditorMode } = useEditorMode();
+
+  useEffect(() => {
+    setEditorMode(viewMode === "editor");
+    return () => setEditorMode(false);
+  }, [viewMode, setEditorMode]);
 
   if (isLoading) {
     return (

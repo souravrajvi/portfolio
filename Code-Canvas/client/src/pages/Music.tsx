@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMusicRecs } from "@/hooks/use-portfolio";
 import { EditableCodeBlock } from "@/components/EditableCodeBlock";
 import { Loader2, Code, Music2, Headphones } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEditorMode } from "@/context/EditorModeContext";
 
 type ViewMode = "visual" | "editor";
 
 export default function Music() {
   const { data: music, isLoading } = useMusicRecs();
   const [viewMode, setViewMode] = useState<ViewMode>("visual");
+  const { setEditorMode } = useEditorMode();
+
+  useEffect(() => {
+    setEditorMode(viewMode === "editor");
+    return () => setEditorMode(false);
+  }, [viewMode, setEditorMode]);
 
   if (isLoading) {
     return (

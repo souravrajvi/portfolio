@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { EditableCodeBlock } from "@/components/EditableCodeBlock";
 import { Loader2, BookOpen, Calendar, Tag, ArrowRight, Code } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEditorMode } from "@/context/EditorModeContext";
 import type { BlogPost } from "@shared/schema";
 
 type ViewMode = "visual" | "editor";
@@ -13,6 +14,12 @@ export default function Blog() {
     queryKey: ["/api/blog"],
   });
   const [viewMode, setViewMode] = useState<ViewMode>("visual");
+  const { setEditorMode } = useEditorMode();
+
+  useEffect(() => {
+    setEditorMode(viewMode === "editor");
+    return () => setEditorMode(false);
+  }, [viewMode, setEditorMode]);
 
   if (isLoading) {
     return (
