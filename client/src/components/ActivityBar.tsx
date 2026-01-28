@@ -1,4 +1,4 @@
-import { Files, Search, GitBranch, Puzzle, Settings, User, Github, Linkedin, Mail } from "lucide-react";
+import { Files, Search, GitBranch, Puzzle, Settings, User, Github, Linkedin, Mail, Download } from "lucide-react";
 
 interface ActivityBarProps {
   activeView: string;
@@ -39,6 +39,18 @@ export function ActivityBar({ activeView, onViewChange }: ActivityBarProps) {
       </div>
       
       <div className="flex flex-col items-center py-2 gap-1 border-t border-[var(--theme-border)]">
+        <a
+          href="/Sourav_Rajvi_Resume.pdf"
+          download="Sourav_Rajvi_Resume.pdf"
+          className="w-12 h-12 flex items-center justify-center text-[var(--theme-text)]/50 hover:text-[var(--theme-accent)] transition-colors group relative"
+          title="Download Resume"
+          data-testid="activity-download-resume"
+        >
+          <Download size={24} />
+          <span className="absolute left-14 px-2 py-1 bg-[var(--theme-sidebar)] border border-[var(--theme-border)] text-xs text-[var(--theme-text)] rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none z-50 transition-opacity">
+            Download Resume
+          </span>
+        </a>
         <a
           href="https://github.com/Souravrajvi0"
           target="_blank"

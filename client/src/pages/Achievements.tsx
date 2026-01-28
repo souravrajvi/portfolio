@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { EditableCodeBlock } from "@/components/EditableCodeBlock";
 import { Loader2, Award, ExternalLink, Shield, Trophy, Medal, Code } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEditorMode } from "@/context/EditorModeContext";
-import type { Achievement } from "@shared/schema";
+import { useAchievements } from "@/hooks/use-portfolio";
 
 type ViewMode = "visual" | "editor";
 
@@ -21,9 +20,7 @@ const typeColors: Record<string, string> = {
 };
 
 export default function Achievements() {
-  const { data: achievements, isLoading } = useQuery<Achievement[]>({
-    queryKey: ["/api/achievements"],
-  });
+  const { data: achievements, isLoading } = useAchievements();
   const [viewMode, setViewMode] = useState<ViewMode>("visual");
   const { setEditorMode } = useEditorMode();
 
