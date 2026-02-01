@@ -132,11 +132,6 @@ export default function Books() {
                         {item.title}
                       </h3>
                       <p className="text-[#d19a66] text-xs font-medium mb-3 opacity-90">by {item.author}</p>
-                      {item.note && (
-                        <p className="text-[#5c6370] text-xs italic leading-relaxed">
-                          {item.note}
-                        </p>
-                      )}
                     </div>
                   </motion.div>
                 ))}

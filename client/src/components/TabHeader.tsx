@@ -24,7 +24,10 @@ interface TabHeaderProps {
 
 export function TabHeader({ onToggleSidebar, sidebarVisible = true, onOpenCommandPalette }: TabHeaderProps) {
   const [location, setLocation] = useLocation();
-  const [closedTabs, setClosedTabs] = useState<Set<string>>(new Set());
+  const [closedTabs, setClosedTabs] = useState<Set<string>>(new Set(
+    // Only show bio.ts by default, hide all other tabs
+    new Set(allTabs.filter(t => t.path !== "/").map(t => t.path))
+  ));
   
   const tabs = allTabs.filter(tab => !closedTabs.has(tab.path));
   

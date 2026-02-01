@@ -3,6 +3,33 @@ import { Loader2, Terminal } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
+// Component to render terminal output with clickable links
+function TerminalOutput({ text }: { text: string }) {
+  const urlRegex = /(https?:\/\/[^\s"<>{}|\\^`\]]+)/g;
+  const parts = text.split(urlRegex);
+
+  return (
+    <>
+      {parts.map((part, idx) => {
+        if (urlRegex.test(part)) {
+          return (
+            <a 
+              key={idx}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#61afef] hover:text-[#c678dd] underline transition-colors"
+            >
+              {part}
+            </a>
+          );
+        }
+        return <span key={idx}>{part}</span>;
+      })}
+    </>
+  );
+}
+
 export default function Home() {
   const { data: profile, isLoading } = useProfile();
   const [typedLines, setTypedLines] = useState<number>(0);
@@ -81,7 +108,7 @@ export default function Home() {
               </div>
               {/* Output */}
               <div className="text-[#abb2bf] ml-0 mb-4 whitespace-pre-wrap">
-                {line.output}
+                <TerminalOutput text={line.output} />
               </div>
             </motion.div>
           ))}

@@ -120,11 +120,6 @@ export default function Music() {
                         {item.title}
                       </h3>
                       <p className="text-[#61afef] text-sm mb-3">{item.artist}</p>
-                      {item.note && (
-                        <p className="text-[#5c6370] text-xs italic leading-relaxed">
-                          {item.note}
-                        </p>
-                      )}
                     </div>
                   </motion.div>
                 ))}

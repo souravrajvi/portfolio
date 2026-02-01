@@ -18,6 +18,7 @@ import Books from "@/pages/Books";
 import Achievements from "@/pages/Achievements";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
+import Writings from "@/pages/Writings";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -34,6 +35,7 @@ function Router() {
         <Route path="/achievements" component={Achievements} />
         <Route path="/blog" component={Blog} />
         <Route path="/blog/:slug" component={BlogPost} />
+        <Route path="/writings" component={Writings} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

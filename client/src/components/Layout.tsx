@@ -24,6 +24,7 @@ const pathToFile: Record<string, { name: string; folder: string }> = {
   "/books": { name: "books.json", folder: "personal" },
   "/achievements": { name: "achievements.json", folder: "career" },
   "/blog": { name: "blog.md", folder: "publications" },
+  "/writings": { name: "writings.md", folder: "publications" },
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
